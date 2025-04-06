@@ -63,7 +63,7 @@ sinal_tx_filtrado=conv(sinal_tx,filtro);       % Sinal Filtrado de Transmissao
 fc=R/2*(1+rolloff);                 % Largura de banda do sinal transmitido
 [bn,an]=butter(5,2*fc/Fs);          % Filtro passa-baixas de largura de banda fc
 
-sinal_rx=filtfilt(bn,an,sinal_tx_filtrado);  %Sinal na saída do 'canal'
+sinal_rx=filtfilt(bn,an,sinal_tx_filtrado);  %Sinal na saÃ­da do 'canal'
 
 sigPower = sum(sinal_rx(:).^2)/length(sinal_rx);
 sigPower = 10*log10(sigPower);
@@ -149,7 +149,7 @@ title('Imagem Recebida');
 
 eyediagram(sinal_rx_casado(1,10000:15000),2*oversampling)     %Diagrama de olho
 
-[num_erros,BER]=symerr(bit_matrix_rx,bit_matrix); % Contagem do número de erros e 
+[num_erros,BER]=symerr(bit_matrix_rx,bit_matrix); % Contagem do nÃºmero de erros e 
                                                   % calculo da BER
 
 disp ('Numero de erros = ') 
