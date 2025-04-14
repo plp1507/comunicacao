@@ -92,6 +92,7 @@ w = np.ones([3, n*k + l*Fs])
 off = 10
 
 for g in range(3):
+    print(f"Modulação {2**(g+1)}-PAM")
     for j, noise in enumerate(sigma2[g]):
         w[g] = np.sqrt(noise/2)*np.random.randn(n*k + l*Fs)
 
@@ -106,7 +107,13 @@ for g in range(3):
         if(g==2):
             m_recons[g] = decide(m_dwnsmp[g], constelacao_8pam)
 
+        print(f'SNR calculada: {10*np.log10(np.mean(m_recons[g]**2)/np.mean(w**2))} dB')
+        print(f'SNR teórica: {SNRt[g][::1000//npt - 1][j]} dB')
+        print(f'SER obtida: {SERt[g][::1000//npt - 1][j]}')
         SERs[g][j] = np.sum(m_recons[g] != mensagem_original[g])/n
+        print(f'SER calculada: {SERs[g][j]}\n')
+   
+    print('\n')
 
 for i in range(3):
     plt.semilogy(SNRt[i], SERt[i], label = f'{2**(i+1)}-PAM (teórico)')
