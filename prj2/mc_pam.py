@@ -110,7 +110,7 @@ for g in range(3):
 
 for i in range(3):
     plt.semilogy(SNRt[i], SERt[i], label = f'{2**(i+1)}-PAM (teórico)')
-    plt.semilogy(SNRs[i], SERs[i], 'o:', label = f'{2**(i+1)}-PAM')
+    #plt.semilogy(SNRs[i], SERs[i], 'o:', label = f'{2**(i+1)}-PAM')
 plt.xlabel('SNR (dB)')
 plt.ylabel('SER')
 
