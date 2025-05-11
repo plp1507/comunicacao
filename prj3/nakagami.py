@@ -6,7 +6,7 @@ from scipy.special import erfc, hyp2f1, gamma
 m = [0.5, 2, 15, 1]
 
 #### Configurações da SNR
-npt = 10
+npt = 20
 SNRt = np.linspace(-2, 10, 1000, endpoint = True)
 SNRs = SNRt[::1000//(npt-1)]
 sigma2 = 10**(-SNRs/10)
@@ -21,39 +21,38 @@ for i in range(4):
 BERs = np.zeros([4, npt])
 
 #### Simulação de Monte Carlo
-n = 10**5     # número de símbolos transmitidos
+n = 10**6     # número de símbolos transmitidos
 mensagem = np.sign(np.random.rand(n) - 0.5)   # geração dos símbolos BPSK
 sig2 = 1      # variância do canal
 
 BERs_awgn = np.zeros(npt)
 
 for i in range(4):
-    rand_n = 4*np.random.rand(n)
-    canal = (2*m[i]**m[i])*rand_n**(2*m[i] - 1)
-    canal /= gamma(m[i])*sig2**m[i]
-    canal *= np.exp((-m[i]*rand_n**2)/sig2)
+    rand_n = np.random.rand(n)
+    canal = (2*m[i]**m[i])*(rand_n**(2*m[i] - 1))*np.exp((-m[i]/sig2)*rand_n**2)/(gamma(m[i])*sig2**m[i])
 
     for k, noise in enumerate(sigma2):
         w = np.sqrt(noise/2)*np.random.randn(n)
-        sinal_rx = canal*mensagem + w
         
+        sinal_rx = canal*mensagem + w
         sinal_rx_awgn = mensagem + w
 
-        mensagem_r = np.sign(sinal_rx)
+        mensagem_r = np.sign(sinal_rx/canal)
+
         BERs[i][k] = np.sum(mensagem_r != mensagem)/n
         BERs_awgn[k] = np.sum(np.sign(sinal_rx_awgn) != mensagem)/n
 
 
-plt.semilogy(SNRt, (1/2)*erfc(np.sqrt(10**(SNRt/10))))
-plt.semilogy(SNRs, BERs_awgn, 'o:', label = 'AWGN')
-'''
+#plt.semilogy(SNRt, (1/2)*erfc(np.sqrt(10**(SNRt/10))))
+#plt.semilogy(SNRs, BERs_awgn, 'o:', label = 'AWGN')
+
 for i in range(3):
     plt.semilogy(SNRt, BERt[i], label = f'Nakagami-m: m = {m[i]}')
     plt.semilogy(SNRs, BERs[i], 'o:', label = f'N-m simulado: m = {m[i]}')
 
 plt.semilogy(SNRt, BERt[3], label = 'Rayleigh')
 plt.semilogy(SNRs, BERs[3], 'o:', label = 'Rayleigh simulado')
-'''
+
 plt.legend()
 plt.grid()
 plt.show()
