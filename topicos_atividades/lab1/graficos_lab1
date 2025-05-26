@@ -1,0 +1,6 @@
+no relatorio, apresentar as curvas de SER das constelações:
+utilizar 6 valores de SNR
+1) 4QAM, 16QAM, 64QAM
+2) BPSK, QPSK, 8PSK, 16PSK
+
+no código, apresentar também o scatter de símbolos recebidos a cada valor de SNR

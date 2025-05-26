@@ -43,6 +43,7 @@ plt.ylim(result - 0.01, result + 0.01)
 
 plt.ylabel('resultado da integral')
 plt.xlabel('número de segmentos')
+plt.title('Integração de Monte Carlo da expressão $e^{-x^2}$')
 
 plt.grid()
 plt.legend()
