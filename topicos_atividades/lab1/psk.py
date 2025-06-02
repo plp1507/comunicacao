@@ -11,12 +11,21 @@ def decide(msg, constelacao):
     return constelacao[np.argmin(distcs, axis = 1)]
 
 def psk_const(M):
-    out = np.exp(-2j*(np.pi/M)*np.arange(M))
+    out = np.exp(1j*(np.pi/M)*np.arange(1, 2*M+1, 2))
     if(M != 2):
-        out *= np.exp(-2j*np.pi/4)
+        out *= 1#np.exp(2j*np.pi/4)
     else:
         out = np.sign(out.real)
     return out
+
+print(np.exp(2j*(np.pi/4)*np.arange(1, 4)))
+
+'''
+1pi/4
+3pi/4
+5pi/4
+7pi/4
+'''
 
 ### Constelações utilizadas
 M = [2, 4, 8, 16]
@@ -56,29 +65,31 @@ sinal_rx = np.zeros([len(M)-1, n], dtype = 'complex')
 sinal_rx_b = np.zeros(n)
 
 for k, noise in enumerate(sigma2):
-    fig, ax = plt.subplots(1, len(M))
+    fig, ax = plt.subplots(2, 2)
     w = np.sqrt(noise/2)*(np.random.randn(len(M)-1, n) + 1j*np.random.randn(len(M)-1, n))
     
     sinal_rx_b = mensagem_b + np.sqrt(noise/2)*(np.random.randn(n))  # ruido do bpsk
     sinal_rx = mensagem + w      # ruido das constelaçoes mpsk (complexas)
 
     # detecçao do bpsk - um pouco diferente do resto
-    ax[0].scatter(sinal_rx_b[:10**4], np.zeros(10**4))
+    ax[0, 0].scatter(sinal_rx_b[:10**4], np.zeros(10**4))
     mensagem_r_b = np.sign(sinal_rx_b)
     SERs[0][k] = np.sum(mensagem_r_b != mensagem_b)/n
-    ax[0].scatter(mensagem_b[:100], np.zeros(100))
-    ax[0].grid()
-    ax[0].set_box_aspect(1)
+    ax[0, 0].scatter(mensagem_b[:100], np.zeros(100))
+    ax[0, 0].grid()
+    ax[0, 0].set_box_aspect(1)
 
     # detecçao dos M-psk
     for i in range(len(M)-1):
-        ax[i+1].scatter(sinal_rx[i][:10**4].real, sinal_rx[i][:10**4].imag)
-        mensagem_r[i] = decide(sinal_rx[i], psk_const(M[i+1]))
+        indx = format(i+1, '02b')
 
+        mensagem_r[i] = decide(sinal_rx[i], psk_const(M[i+1]))
         SERs[i+1][k] = np.sum(mensagem_r[i] != mensagem[i])/n
-        ax[i+1].scatter(mensagem[i][:100].real, mensagem[i][:100].imag)
-        ax[i+1].grid()
-        ax[i+1].set_box_aspect(1)
+        
+        ax[int(indx[0]), int(indx[1])].scatter(sinal_rx[i][:10**4].real, sinal_rx[i][:10**4].imag)
+        ax[int(indx[0]), int(indx[1])].scatter(mensagem[i][:100].real, mensagem[i][:100].imag)
+        ax[int(indx[0]), int(indx[1])].grid()
+        ax[int(indx[0]), int(indx[1])].set_box_aspect(1)
 
     plt.show()
 

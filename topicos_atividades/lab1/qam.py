@@ -56,7 +56,8 @@ for k, i in enumerate(M):
 ### Simulação de Monte Carlo
 mensagem_r = np.zeros([len(M), n], dtype = 'complex')
 for k, noise in enumerate(sigma2):
-    fig, ax = plt.subplots(1, len(M))
+    fig, ax = plt.subplots(1, len(M)) 
+
     w = np.sqrt(noise/2)*(np.random.randn(len(M), n) + 1j*np.random.randn(len(M), n))
 
     sinal_rx = mensagem + w
@@ -65,8 +66,10 @@ for k, noise in enumerate(sigma2):
         ax[i].scatter(sinal_rx[i][:10**4].real, sinal_rx[i][:10**4].imag)
         if(i==0):
             mensagem_r[i] = decide(sinal_rx[i], const4)
+            ax[i].set_ylabel('Q')
         elif(i==1):
             mensagem_r[i] = decide(sinal_rx[i], const16)
+            ax[i].set_xlabel('I')
         else:
             mensagem_r[i] = decide(sinal_rx[i], const64)
 
