@@ -12,20 +12,9 @@ def decide(msg, constelacao):
 
 def psk_const(M):
     out = np.exp(1j*(np.pi/M)*np.arange(1, 2*M+1, 2))
-    if(M != 2):
-        out *= 1#np.exp(2j*np.pi/4)
-    else:
+    if(M == 2):
         out = np.sign(out.real)
     return out
-
-print(np.exp(2j*(np.pi/4)*np.arange(1, 4)))
-
-'''
-1pi/4
-3pi/4
-5pi/4
-7pi/4
-'''
 
 ### Constelações utilizadas
 M = [2, 4, 8, 16]
